@@ -21,7 +21,7 @@ Install the `status-bar` plugin to get started.
 1. Run the following command in the `src-tauri` folder to add the plugin to the project’s dependencies in `Cargo.toml`:
 
    ```shell
-   cargo add tauri-plugin-network-information@0.1 --target 'cfg(any(target_os = "android", target_os = "ios"))'
+   cargo add tauri-plugin-status-bar@0.1 --target 'cfg(any(target_os = "android", target_os = "ios"))'
    ```
 
 1. Modify `lib.rs` to initialize the plugin:

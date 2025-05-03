@@ -49,7 +49,7 @@
           "minimum": 1.0
         },
         "description": {
-          "description": "Human-readable description of what the permission does. Tauri convention is to use <h4> headings in markdown content for Tauri documentation generation purposes.",
+          "description": "Human-readable description of what the permission does. Tauri convention is to use `<h4>` headings in markdown content for Tauri documentation generation purposes.",
           "type": [
             "string",
             "null"
@@ -111,7 +111,7 @@
           "type": "string"
         },
         "description": {
-          "description": "Human-readable description of what the permission does. Tauri internal convention is to use <h4> headings in markdown content for Tauri documentation generation purposes.",
+          "description": "Human-readable description of what the permission does. Tauri internal convention is to use `<h4>` headings in markdown content for Tauri documentation generation purposes.",
           "type": [
             "string",
             "null"
@@ -297,57 +297,68 @@
         {
           "description": "Enables the default_scroll_top command without any pre-configured scope.",
           "type": "string",
-          "const": "allow-default-scroll-top"
+          "const": "allow-default-scroll-top",
+          "markdownDescription": "Enables the default_scroll_top command without any pre-configured scope."
         },
         {
           "description": "Denies the default_scroll_top command without any pre-configured scope.",
           "type": "string",
-          "const": "deny-default-scroll-top"
+          "const": "deny-default-scroll-top",
+          "markdownDescription": "Denies the default_scroll_top command without any pre-configured scope."
         },
         {
           "description": "Enables the hide command without any pre-configured scope.",
           "type": "string",
-          "const": "allow-hide"
+          "const": "allow-hide",
+          "markdownDescription": "Enables the hide command without any pre-configured scope."
         },
         {
           "description": "Denies the hide command without any pre-configured scope.",
           "type": "string",
-          "const": "deny-hide"
+          "const": "deny-hide",
+          "markdownDescription": "Denies the hide command without any pre-configured scope."
         },
         {
           "description": "Enables the is_visible command without any pre-configured scope.",
           "type": "string",
-          "const": "allow-is-visible"
+          "const": "allow-is-visible",
+          "markdownDescription": "Enables the is_visible command without any pre-configured scope."
         },
         {
           "description": "Denies the is_visible command without any pre-configured scope.",
           "type": "string",
-          "const": "deny-is-visible"
+          "const": "deny-is-visible",
+          "markdownDescription": "Denies the is_visible command without any pre-configured scope."
         },
         {
           "description": "Enables the registerListener command without any pre-configured scope.",
           "type": "string",
-          "const": "allow-registerListener"
+          "const": "allow-registerListener",
+          "markdownDescription": "Enables the registerListener command without any pre-configured scope."
         },
         {
           "description": "Denies the registerListener command without any pre-configured scope.",
           "type": "string",
-          "const": "deny-registerListener"
+          "const": "deny-registerListener",
+          "markdownDescription": "Denies the registerListener command without any pre-configured scope."
         },
         {
           "description": "Enables the set_status_bar command without any pre-configured scope.",
           "type": "string",
-          "const": "allow-set-status-bar"
+          "const": "allow-set-status-bar",
+          "markdownDescription": "Enables the set_status_bar command without any pre-configured scope."
         },
         {
           "description": "Denies the set_status_bar command without any pre-configured scope.",
           "type": "string",
-          "const": "deny-set-status-bar"
+          "const": "deny-set-status-bar",
+          "markdownDescription": "Denies the set_status_bar command without any pre-configured scope."
         },
         {
-          "description": "Default permissions for the plugin `status-bar`",
+          "description": "Default permissions for the plugin `status-bar`\n#### This default permission set includes:\n\n- `allow-hide`\n- `allow-is-visible`\n- `allow-set-status-bar`\n- `allow-default-scroll-top`\n- `allow-registerListener`",
           "type": "string",
-          "const": "default"
+          "const": "default",
+          "markdownDescription": "Default permissions for the plugin `status-bar`\n#### This default permission set includes:\n\n- `allow-hide`\n- `allow-is-visible`\n- `allow-set-status-bar`\n- `allow-default-scroll-top`\n- `allow-registerListener`"
         }
       ]
     }

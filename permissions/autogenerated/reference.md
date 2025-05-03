@@ -2,9 +2,12 @@
 
 Default permissions for the plugin `status-bar`
 
+#### This default permission set includes the following:
+
 - `allow-hide`
 - `allow-is-visible`
 - `allow-set-status-bar`
+- `allow-default-scroll-top`
 - `allow-registerListener`
 
 ## Permission Table
