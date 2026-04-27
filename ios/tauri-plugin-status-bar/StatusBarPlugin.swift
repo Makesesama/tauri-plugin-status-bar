@@ -52,12 +52,16 @@ class StatusBarPlugin: Plugin {
     }
 
     DispatchQueue.main.async { [weak self] in
-      guard let self = self else { return }
+      guard let self = self else {
+        invoke.resolve()
+        return
+      }
       self.manager.viewController?.overrideUserInterfaceStyle = self.lightStyle ? .light : .dark
       self.statusBarWindow?.backgroundColor = self.backgroundColor
       if !self.visible() {
         self.statusBarWindow?.isHidden = true
       }
+      invoke.resolve()
     }
   }
 
