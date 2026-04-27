@@ -28,72 +28,32 @@ class StatusBarPlugin: Plugin {
   override func load(webview: WKWebView) {
     super.load(webview: webview)
 
-    if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
-      if let statusBarFrame = windowScene.statusBarManager?.statusBarFrame {
-        let window = UIWindow(frame: statusBarFrame)
-        statusBarWindow = window
-        os_log(.debug, log: log, "statusBarWindow == nil? %{public}@", String(describing: statusBarWindow == nil))
-      }
-    }
-
-    if let statusBarFrame = UIApplication.shared.windows.first?.windowScene?.statusBarManager?.statusBarFrame {
-      let statusBarView = UIView(frame: statusBarFrame)
-      if let backgroundColor = statusBarView.backgroundColor {
-        os_log(.debug, log: log, "backgroundColor：%{public}@", backgroundColor)
-      } else {
-        os_log(.debug, log: log, "backgroundColor not setting or transparent")
-      }
-    }
-
-    let style = UITraitCollection.current.userInterfaceStyle
-    if style == .dark {
-      os_log(.debug, log: log, "style light text color")
-    } else {
-      os_log(.debug, log: log, "style dark text color")
-    }
-
-    if let window = UIApplication.shared.windows.first {
-      let statusBarHeight = window.windowScene?.statusBarManager?.statusBarFrame.height ?? 0
-      if webview.frame.origin.y <= statusBarHeight {
-        os_log(.debug, log: log, "overlay true")
-      } else {
-        os_log(.debug, log: log, "overlay false")
-      }
+    if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+       let statusBarFrame = windowScene.statusBarManager?.statusBarFrame {
+      statusBarWindow = UIWindow(frame: statusBarFrame)
     }
   }
 
   @objc public func setStatusBar(_ invoke: Invoke) throws {
     let args = try invoke.parseArgs(SetStatusBarArgs.self)
-    os_log(.debug, log: log, "setStatusBar-args: backgroundColor-%{public}@, lightStyle-%{public}@, overlay-%{public}@",
-           args.backgroundColor ?? "nil",
-           String(describing: args.lightStyle),
-           String(describing: args.overlay))
 
-    if args.overlay != nil {
-      overlay = args.overlay!
+    if let value = args.overlay {
+      overlay = value
     }
-    if args.lightStyle != nil {
-      lightStyle = args.lightStyle!
+    if let value = args.lightStyle {
+      lightStyle = value
     }
-    if args.backgroundColor != nil {
-      if args.backgroundColor!.elementsEqual("transparent") {
+    if let color = args.backgroundColor {
+      if color == "transparent" {
         backgroundColor = UIColor.clear
       } else {
-        backgroundColor = UIColor(hexString: args.backgroundColor!) ?? backgroundColor
+        backgroundColor = UIColor(hexString: color) ?? backgroundColor
       }
     }
-    os_log(.debug, log: log, "setStatusBar: backgroundColor-%{public}@, lightStyle-%{public}@, overlay-%{public}@",
-           backgroundColor,
-           lightStyle ? "true" : "false",
-           overlay ? "true" : "false")
 
     DispatchQueue.main.async { [weak self] in
       guard let self = self else { return }
-      if self.lightStyle {
-        self.manager.viewController?.overrideUserInterfaceStyle = .light
-      } else {
-        self.manager.viewController?.overrideUserInterfaceStyle = .dark
-      }
+      self.manager.viewController?.overrideUserInterfaceStyle = self.lightStyle ? .light : .dark
       self.statusBarWindow?.backgroundColor = self.backgroundColor
       if !self.visible() {
         self.statusBarWindow?.isHidden = true
@@ -102,9 +62,7 @@ class StatusBarPlugin: Plugin {
   }
 
   @objc public func isVisible(_ invoke: Invoke) throws {
-    let _visible = visible()
-    os_log(.debug, log: log, "isVisible： %{public}@", _visible ? "true" : "false")
-    invoke.resolve(_visible)
+    invoke.resolve(visible())
   }
 
   @objc public func hide(_ invoke: Invoke) throws {

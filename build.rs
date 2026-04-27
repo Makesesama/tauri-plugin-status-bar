@@ -2,8 +2,6 @@ const COMMANDS: &[&str] = &[
     "set_status_bar",
     "hide",
     "is_visible",
-    "default_scroll_top",
-    "registerListener",
 ];
 
 fn main() {

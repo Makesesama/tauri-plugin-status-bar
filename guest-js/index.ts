@@ -1,4 +1,4 @@
-import { addPluginListener, invoke } from "@tauri-apps/api/core";
+import { invoke } from "@tauri-apps/api/core";
 
 export interface SetStatusBarOptions {
   /** Make the statusbar overlay or not overlay the WebView. */
@@ -61,27 +61,4 @@ export async function hide() {
  */
 export async function isVisible() {
   return await invoke<boolean>("plugin:status-bar|is_visible");
-}
-
-let _onStatusTap: () => void;
-function onStatusTapCallback() {
-  _onStatusTap?.();
-}
-/**
- * Listen for this event to know if the statusbar was tapped.
- *
- * **Only support iOS**
- * @param callback unlisten if callback is empty.
- */
-export async function onStatusTap(callback?: () => void) {
-  if (!_onStatusTap) {
-    addPluginListener("status-bar", "statusTap", onStatusTapCallback);
-  }
-  if (callback) {
-    _onStatusTap = callback;
-    await invoke<void>("plugin:status-bar|default_scroll_top", { payload: false });
-  } else {
-    _onStatusTap = () => {};
-    await invoke<void>("plugin:status-bar|default_scroll_top", { payload: true });
-  }
 }

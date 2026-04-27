@@ -295,18 +295,6 @@
       "type": "string",
       "oneOf": [
         {
-          "description": "Enables the default_scroll_top command without any pre-configured scope.",
-          "type": "string",
-          "const": "allow-default-scroll-top",
-          "markdownDescription": "Enables the default_scroll_top command without any pre-configured scope."
-        },
-        {
-          "description": "Denies the default_scroll_top command without any pre-configured scope.",
-          "type": "string",
-          "const": "deny-default-scroll-top",
-          "markdownDescription": "Denies the default_scroll_top command without any pre-configured scope."
-        },
-        {
           "description": "Enables the hide command without any pre-configured scope.",
           "type": "string",
           "const": "allow-hide",
@@ -331,18 +319,6 @@
           "markdownDescription": "Denies the is_visible command without any pre-configured scope."
         },
         {
-          "description": "Enables the registerListener command without any pre-configured scope.",
-          "type": "string",
-          "const": "allow-registerListener",
-          "markdownDescription": "Enables the registerListener command without any pre-configured scope."
-        },
-        {
-          "description": "Denies the registerListener command without any pre-configured scope.",
-          "type": "string",
-          "const": "deny-registerListener",
-          "markdownDescription": "Denies the registerListener command without any pre-configured scope."
-        },
-        {
           "description": "Enables the set_status_bar command without any pre-configured scope.",
           "type": "string",
           "const": "allow-set-status-bar",
@@ -355,10 +331,10 @@
           "markdownDescription": "Denies the set_status_bar command without any pre-configured scope."
         },
         {
-          "description": "Default permissions for the plugin `status-bar`\n#### This default permission set includes:\n\n- `allow-hide`\n- `allow-is-visible`\n- `allow-set-status-bar`\n- `allow-default-scroll-top`\n- `allow-registerListener`",
+          "description": "Default permissions for the plugin `status-bar`\n#### This default permission set includes:\n\n- `allow-hide`\n- `allow-is-visible`\n- `allow-set-status-bar`",
           "type": "string",
           "const": "default",
-          "markdownDescription": "Default permissions for the plugin `status-bar`\n#### This default permission set includes:\n\n- `allow-hide`\n- `allow-is-visible`\n- `allow-set-status-bar`\n- `allow-default-scroll-top`\n- `allow-registerListener`"
+          "markdownDescription": "Default permissions for the plugin `status-bar`\n#### This default permission set includes:\n\n- `allow-hide`\n- `allow-is-visible`\n- `allow-set-status-bar`"
         }
       ]
     }

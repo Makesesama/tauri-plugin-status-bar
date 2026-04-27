@@ -6,6 +6,4 @@ permissions = [
   "allow-hide",
   "allow-is-visible",
   "allow-set-status-bar",
-  "allow-default-scroll-top",
-  "allow-registerListener",
 ]

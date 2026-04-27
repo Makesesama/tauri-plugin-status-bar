@@ -7,8 +7,6 @@ Default permissions for the plugin `status-bar`
 - `allow-hide`
 - `allow-is-visible`
 - `allow-set-status-bar`
-- `allow-default-scroll-top`
-- `allow-registerListener`
 
 ## Permission Table
 
@@ -18,32 +16,6 @@ Default permissions for the plugin `status-bar`
 <th>Description</th>
 </tr>
 
-
-<tr>
-<td>
-
-`status-bar:allow-default-scroll-top`
-
-</td>
-<td>
-
-Enables the default_scroll_top command without any pre-configured scope.
-
-</td>
-</tr>
-
-<tr>
-<td>
-
-`status-bar:deny-default-scroll-top`
-
-</td>
-<td>
-
-Denies the default_scroll_top command without any pre-configured scope.
-
-</td>
-</tr>
 
 <tr>
 <td>
@@ -93,32 +65,6 @@ Enables the is_visible command without any pre-configured scope.
 <td>
 
 Denies the is_visible command without any pre-configured scope.
-
-</td>
-</tr>
-
-<tr>
-<td>
-
-`status-bar:allow-registerListener`
-
-</td>
-<td>
-
-Enables the registerListener command without any pre-configured scope.
-
-</td>
-</tr>
-
-<tr>
-<td>
-
-`status-bar:deny-registerListener`
-
-</td>
-<td>
-
-Denies the registerListener command without any pre-configured scope.
 
 </td>
 </tr>
