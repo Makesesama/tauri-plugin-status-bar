@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		094A1ECD90ECD007825D95B3 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84E625C1ABDB2D39CB77BF29 /* Security.framework */; };
+		11ED19ECD2D39EE42C60C4C5 /* libPods-tauri-app_iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 85E141BAB3AEA7428478C4D2 /* libPods-tauri-app_iOS.a */; };
 		1524BBF419A24C289873FCE0 /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA1A066F7EDD869BC014BB9C /* Metal.framework */; };
 		5DCFDCE0989E0655641185BE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BA38F7BF7C28E04DBA849965 /* LaunchScreen.storyboard */; };
 		5DDC8F8949AE56AB4B683F62 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5384EE0C649F19A31B462538 /* QuartzCore.framework */; };
@@ -26,10 +27,13 @@
 		415CE9B61EE711FB11882F1B /* bindings.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = bindings.h; sourceTree = "<group>"; };
 		46600E42EDBD4E2F9CFFB94E /* libapp.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libapp.a; sourceTree = "<group>"; };
 		5384EE0C649F19A31B462538 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		5DDB28EE4A03ADAB53EF7984 /* Pods-tauri-app_iOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tauri-app_iOS.release.xcconfig"; path = "Target Support Files/Pods-tauri-app_iOS/Pods-tauri-app_iOS.release.xcconfig"; sourceTree = "<group>"; };
+		617C570641ED870A8F96B687 /* Pods-tauri-app_iOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tauri-app_iOS.debug.xcconfig"; path = "Target Support Files/Pods-tauri-app_iOS/Pods-tauri-app_iOS.debug.xcconfig"; sourceTree = "<group>"; };
 		6B62CCFCDED0CBE851A51E4F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		75C0A66A4769E0B428DFFE16 /* main.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = main.mm; sourceTree = "<group>"; };
 		7A62F8DA3ACF6DA66CB9785D /* tauri-app_iOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "tauri-app_iOS.entitlements"; sourceTree = "<group>"; };
 		84E625C1ABDB2D39CB77BF29 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		85E141BAB3AEA7428478C4D2 /* libPods-tauri-app_iOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-tauri-app_iOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B11C2C873FB5A7B97B0605A /* tauri-app.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "tauri-app.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		AC56A11F310BBFF30CCFEB63 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		B8DBF813DB5FCB214283D94D /* MetalKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MetalKit.framework; path = System/Library/Frameworks/MetalKit.framework; sourceTree = SDKROOT; };
@@ -55,6 +59,7 @@
 				094A1ECD90ECD007825D95B3 /* Security.framework in Frameworks */,
 				6495EEEF2DFC12CB82351B2B /* UIKit.framework in Frameworks */,
 				824033B5A7F94F13A4C63E6E /* WebKit.framework in Frameworks */,
+				11ED19ECD2D39EE42C60C4C5 /* libPods-tauri-app_iOS.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -94,6 +99,16 @@
 			path = bindings;
 			sourceTree = "<group>";
 		};
+		777A806EAD413C34A3A6C13A /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				617C570641ED870A8F96B687 /* Pods-tauri-app_iOS.debug.xcconfig */,
+				5DDB28EE4A03ADAB53EF7984 /* Pods-tauri-app_iOS.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		86E4D2974D6FC803E43026BD /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -105,6 +120,7 @@
 				84E625C1ABDB2D39CB77BF29 /* Security.framework */,
 				C42C09CE350D0304EDF85C59 /* UIKit.framework */,
 				CF0F15D9837DA9743995496A /* WebKit.framework */,
+				85E141BAB3AEA7428478C4D2 /* libPods-tauri-app_iOS.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -147,6 +163,7 @@
 				A17B869C1C261C5F8DF765C9 /* tauri-app_iOS */,
 				86E4D2974D6FC803E43026BD /* Frameworks */,
 				4261FD71066ABB203F1B3741 /* Products */,
+				777A806EAD413C34A3A6C13A /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -157,6 +174,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 492FB4942D220065AF299C12 /* Build configuration list for PBXNativeTarget "tauri-app_iOS" */;
 			buildPhases = (
+				8EC87882BB7DAF89376AFEEB /* [CP] Check Pods Manifest.lock */,
 				4CFF21EFA1FFE4D2AB9D6998 /* Build Rust Code */,
 				D8D571D7BDCA1ABF2E0CB9D6 /* Sources */,
 				A4D85C1726744E26D8F01FD3 /* Resources */,
@@ -189,6 +207,7 @@
 				en,
 			);
 			mainGroup = E8C7C60131D2B902F3255A8F;
+			productRefGroup = 4261FD71066ABB203F1B3741 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -233,6 +252,28 @@
 			shellPath = /bin/sh;
 			shellScript = "source ~/.zprofile\npnpm tauri ios xcode-script -v --platform ${PLATFORM_DISPLAY_NAME:?} --sdk-root ${SDKROOT:?} --framework-search-paths \"${FRAMEWORK_SEARCH_PATHS:?}\" --header-search-paths \"${HEADER_SEARCH_PATHS:?}\" --gcc-preprocessor-definitions \"${GCC_PREPROCESSOR_DEFINITIONS:-}\" --configuration ${CONFIGURATION:?} ${FORCE_COLOR} ${ARCHS:?}\n";
 		};
+		8EC87882BB7DAF89376AFEEB /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-tauri-app_iOS-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -249,6 +290,7 @@
 /* Begin XCBuildConfiguration section */
 		421E0640619ED5B0C0B13B4E /* debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 617C570641ED870A8F96B687 /* Pods-tauri-app_iOS.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ARCHS = (
@@ -261,7 +303,6 @@
 				DEVELOPMENT_TEAM = 66K879GR8N;
 				ENABLE_BITCODE = NO;
 				"EXCLUDED_ARCHS[sdk=iphoneos*]" = "arm64-sim x86_64";
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\".\"",
@@ -348,7 +389,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -410,7 +451,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -424,6 +465,7 @@
 		};
 		D2A4FF1B078298AC78D0EBD3 /* release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5DDB28EE4A03ADAB53EF7984 /* Pods-tauri-app_iOS.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ARCHS = (
@@ -436,7 +478,6 @@
 				DEVELOPMENT_TEAM = 66K879GR8N;
 				ENABLE_BITCODE = NO;
 				"EXCLUDED_ARCHS[sdk=iphoneos*]" = "arm64-sim x86_64";
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\".\"",
