@@ -19,6 +19,32 @@ class SetStatusBarArgs: Decodable {
   let lightStyle: Bool?
 }
 
+class StatusBarViewController: UIViewController {
+  var lightStyle: Bool = false {
+    didSet {
+      if oldValue != lightStyle {
+        setNeedsStatusBarAppearanceUpdate()
+      }
+    }
+  }
+
+  var statusBarHidden: Bool = false {
+    didSet {
+      if oldValue != statusBarHidden {
+        setNeedsStatusBarAppearanceUpdate()
+      }
+    }
+  }
+
+  override var preferredStatusBarStyle: UIStatusBarStyle {
+    return lightStyle ? .darkContent : .lightContent
+  }
+
+  override var prefersStatusBarHidden: Bool {
+    return statusBarHidden
+  }
+}
+
 class StatusBarPlugin: Plugin {
   private var backgroundColor: UIColor = .clear
   private var lightStyle: Bool = false
@@ -30,7 +56,14 @@ class StatusBarPlugin: Plugin {
 
     if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
        let statusBarFrame = windowScene.statusBarManager?.statusBarFrame {
-      statusBarWindow = UIWindow(frame: statusBarFrame)
+      let window = UIWindow(windowScene: windowScene)
+      window.frame = statusBarFrame
+      window.windowLevel = .statusBar + 1
+      window.isUserInteractionEnabled = false
+      window.backgroundColor = .clear
+      window.rootViewController = StatusBarViewController()
+      window.isHidden = false
+      statusBarWindow = window
     }
   }
 
@@ -56,11 +89,10 @@ class StatusBarPlugin: Plugin {
         invoke.resolve()
         return
       }
-      self.manager.viewController?.overrideUserInterfaceStyle = self.lightStyle ? .light : .dark
-      self.statusBarWindow?.backgroundColor = self.backgroundColor
-      if !self.visible() {
-        self.statusBarWindow?.isHidden = true
+      if let vc = self.statusBarWindow?.rootViewController as? StatusBarViewController {
+        vc.lightStyle = self.lightStyle
       }
+      self.statusBarWindow?.backgroundColor = self.backgroundColor
       invoke.resolve()
     }
   }
@@ -71,24 +103,14 @@ class StatusBarPlugin: Plugin {
 
   @objc public func hide(_ invoke: Invoke) throws {
     DispatchQueue.main.async { [weak self] in
-      guard let self = self else { return }
-      if #available(iOS 13.0, *) {
-        if self.statusBarWindow != nil {
-          self.statusBarWindow!.backgroundColor = .clear
-          self.statusBarWindow!.windowLevel = .statusBar + 1
-          self.statusBarWindow!.isHidden = false
-        } else if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
-          if let statusBarFrame = windowScene.statusBarManager?.statusBarFrame {
-            let window = UIWindow(frame: statusBarFrame)
-            window.backgroundColor = .clear
-            window.windowLevel = .statusBar + 1
-            window.isHidden = false
-            self.statusBarWindow = window
-          }
-        }
-      } else {
-        UIApplication.shared.isStatusBarHidden = true
+      guard let self = self else {
+        invoke.resolve()
+        return
       }
+      if let vc = self.statusBarWindow?.rootViewController as? StatusBarViewController {
+        vc.statusBarHidden = true
+      }
+      invoke.resolve()
     }
   }
 
