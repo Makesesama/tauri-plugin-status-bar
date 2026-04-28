@@ -5,6 +5,7 @@
 //  Created by wtto on 2024/12/16.
 //
 
+import ObjectiveC.runtime
 import OSLog
 import SwiftRs
 import Tauri
@@ -19,29 +20,17 @@ class SetStatusBarArgs: Decodable {
   let lightStyle: Bool?
 }
 
-class StatusBarViewController: UIViewController {
-  var lightStyle: Bool = false {
-    didSet {
-      if oldValue != lightStyle {
-        setNeedsStatusBarAppearanceUpdate()
-      }
-    }
-  }
+private var lightStyleKey: UInt8 = 0
+private var statusBarHiddenKey: UInt8 = 0
 
-  var statusBarHidden: Bool = false {
-    didSet {
-      if oldValue != statusBarHidden {
-        setNeedsStatusBarAppearanceUpdate()
-      }
-    }
+extension UIViewController {
+  fileprivate var pluginLightStyle: Bool {
+    get { (objc_getAssociatedObject(self, &lightStyleKey) as? Bool) ?? false }
+    set { objc_setAssociatedObject(self, &lightStyleKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
   }
-
-  override var preferredStatusBarStyle: UIStatusBarStyle {
-    return lightStyle ? .darkContent : .lightContent
-  }
-
-  override var prefersStatusBarHidden: Bool {
-    return statusBarHidden
+  fileprivate var pluginStatusBarHidden: Bool {
+    get { (objc_getAssociatedObject(self, &statusBarHiddenKey) as? Bool) ?? false }
+    set { objc_setAssociatedObject(self, &statusBarHiddenKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
   }
 }
 
@@ -49,22 +38,44 @@ class StatusBarPlugin: Plugin {
   private var backgroundColor: UIColor = .clear
   private var lightStyle: Bool = false
   private var overlay: Bool = true
-  private var statusBarWindow: UIWindow?
+  private weak var hostViewController: UIViewController?
+  private weak var backgroundView: UIView?
 
   override func load(webview: WKWebView) {
     super.load(webview: webview)
+    // No UI work here — touching scenes/windows during load() disrupts the
+    // host webview's presentation on iOS 26. Everything is set up lazily
+    // on the first setStatusBar/hide call, by which time the host's window
+    // is fully attached.
+  }
 
-    if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-       let statusBarFrame = windowScene.statusBarManager?.statusBarFrame {
-      let window = UIWindow(windowScene: windowScene)
-      window.frame = statusBarFrame
-      window.windowLevel = .statusBar + 1
-      window.isUserInteractionEnabled = false
-      window.backgroundColor = .clear
-      window.rootViewController = StatusBarViewController()
-      window.isHidden = false
-      statusBarWindow = window
+  /// Take ownership of status bar appearance on the host VC. Idempotent.
+  private func attachIfNeeded() {
+    guard hostViewController == nil, let vc = manager.viewController else { return }
+    Self.installStatusBarOverrides(on: vc)
+    hostViewController = vc
+  }
+
+  /// Insert a tinted view behind the status bar area on the host's view, or
+  /// update its color if already present.
+  private func applyBackgroundTint() {
+    guard let host = hostViewController else { return }
+    if let existing = backgroundView {
+      existing.backgroundColor = backgroundColor
+      return
     }
+    let view = UIView()
+    view.translatesAutoresizingMaskIntoConstraints = false
+    view.backgroundColor = backgroundColor
+    view.isUserInteractionEnabled = false
+    host.view.addSubview(view)
+    NSLayoutConstraint.activate([
+      view.topAnchor.constraint(equalTo: host.view.topAnchor),
+      view.leadingAnchor.constraint(equalTo: host.view.leadingAnchor),
+      view.trailingAnchor.constraint(equalTo: host.view.trailingAnchor),
+      view.bottomAnchor.constraint(equalTo: host.view.safeAreaLayoutGuide.topAnchor),
+    ])
+    backgroundView = view
   }
 
   @objc public func setStatusBar(_ invoke: Invoke) throws {
@@ -89,10 +100,13 @@ class StatusBarPlugin: Plugin {
         invoke.resolve()
         return
       }
-      if let vc = self.statusBarWindow?.rootViewController as? StatusBarViewController {
-        vc.lightStyle = self.lightStyle
+      self.attachIfNeeded()
+      if let host = self.hostViewController {
+        host.pluginLightStyle = self.lightStyle
+        host.pluginStatusBarHidden = false
+        host.setNeedsStatusBarAppearanceUpdate()
+        self.applyBackgroundTint()
       }
-      self.statusBarWindow?.backgroundColor = self.backgroundColor
       invoke.resolve()
     }
   }
@@ -107,22 +121,61 @@ class StatusBarPlugin: Plugin {
         invoke.resolve()
         return
       }
-      if let vc = self.statusBarWindow?.rootViewController as? StatusBarViewController {
-        vc.statusBarHidden = true
+      self.attachIfNeeded()
+      if let host = self.hostViewController {
+        host.pluginStatusBarHidden = true
+        host.setNeedsStatusBarAppearanceUpdate()
       }
       invoke.resolve()
     }
   }
 
   func visible() -> Bool {
-    if #available(iOS 13.0, *) {
-      if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
-        return !(windowScene.statusBarManager!.isStatusBarHidden)
-      }
-      return true
-    } else {
-      return !UIApplication.shared.isStatusBarHidden
+    if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+       let manager = windowScene.statusBarManager {
+      return !manager.isStatusBarHidden
     }
+    return true
+  }
+
+  // MARK: - isa-swizzling
+
+  /// Reparent the host VC into a dynamic subclass that overrides
+  /// preferredStatusBarStyle / prefersStatusBarHidden. Affects only this
+  /// instance — same trick KVO uses.
+  private static func installStatusBarOverrides(on vc: UIViewController) {
+    let originalClass: AnyClass = object_getClass(vc)!
+    let originalName = NSStringFromClass(originalClass)
+    if originalName.hasPrefix("TauriStatusBar_") { return }
+
+    let dynamicName = "TauriStatusBar_" + originalName
+    if let existing = NSClassFromString(dynamicName) {
+      object_setClass(vc, existing)
+      return
+    }
+
+    guard let subclass: AnyClass = objc_allocateClassPair(originalClass, dynamicName, 0) else {
+      return
+    }
+
+    let styleSel = #selector(getter: UIViewController.preferredStatusBarStyle)
+    let styleBlock: @convention(block) (UIViewController) -> UIStatusBarStyle = { vc in
+      return vc.pluginLightStyle ? .lightContent : .darkContent
+    }
+    let styleImp = imp_implementationWithBlock(styleBlock)
+    let styleTypes = class_getInstanceMethod(originalClass, styleSel).flatMap { method_getTypeEncoding($0) }
+    class_addMethod(subclass, styleSel, styleImp, styleTypes)
+
+    let hiddenSel = #selector(getter: UIViewController.prefersStatusBarHidden)
+    let hiddenBlock: @convention(block) (UIViewController) -> Bool = { vc in
+      return vc.pluginStatusBarHidden
+    }
+    let hiddenImp = imp_implementationWithBlock(hiddenBlock)
+    let hiddenTypes = class_getInstanceMethod(originalClass, hiddenSel).flatMap { method_getTypeEncoding($0) }
+    class_addMethod(subclass, hiddenSel, hiddenImp, hiddenTypes)
+
+    objc_registerClassPair(subclass)
+    object_setClass(vc, subclass)
   }
 }
 
